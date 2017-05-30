@@ -15,7 +15,9 @@ class Timer extends Component {
 
     // format timer
     const timer = this.props.timer;
-    const time = `${timer.minutes()}:${timer.seconds()}`;
+    const minutes = ('0' + timer.minutes()).slice(-2);
+    const seconds = ('0' + timer.seconds()).slice(-2);
+    const time = `${minutes}:${seconds}`;
 
     return (
       <div>
@@ -71,7 +73,7 @@ class App extends Component {
     super(props);
     this.workTime = 25;
     this.restTime = 5;
-    this.timeUnit = 'seconds';
+    this.timeUnit = 'minutes';
     this.timerSpeed = 1000;
     this.state = {
       timer: null,
@@ -93,6 +95,18 @@ class App extends Component {
   }
 
   handleStart() {
+    // ask to notify user
+    if (!this.state.notify) {
+      Notification.requestPermission().then((result) => {
+        if (result === 'granted') {
+          this.setState({
+            notify: true
+          });
+        }
+      });
+    } 
+
+    // set timer
     const interval = setInterval(this.tick, this.timerSpeed);
     this.setState({
       intervalID: interval
@@ -124,13 +138,25 @@ class App extends Component {
   checkTimer(timer) {
     if (timer.asSeconds() <= 0) {
       if (this.state.isWorkPhase) {
+        // transition to rest phase
         this.setState({
           timer: moment.duration(this.restTime, this.timeUnit),
           isWorkPhase: false
         });
+
+        // notify user
+        if (this.state.notify) {
+          this.notify('Take a well deserved break.')
+        }
       }
       else {
+        // reset timer
         this.handleClear();
+
+        // notify user
+        if (this.state.notify) {
+          this.notify('Time to get back to work!')
+        }
       }
     }
     else {
@@ -138,6 +164,12 @@ class App extends Component {
         timer: timer
       });
     }
+  }
+
+  notify(message) {
+    const n = new Notification ('Pomodoro', {
+      body: message
+    });
   }
 
   render() {
