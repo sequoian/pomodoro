@@ -1,11 +1,119 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import './App.css';
 
+class Timer extends Component {
+  render() {
+    // get timer phase
+    let phase = null;
+    if (this.props.working) {
+      phase = 'Work'
+    }
+    else {
+      phase = 'Rest'
+    }
+
+    // format timer
+    const timer = this.props.timer;
+    const time = `${timer.minutes()}:${timer.seconds()}`;
+
+    return (
+      <div>
+        <div className="phase">
+          {phase}
+        </div>
+        <div className="timer">
+          {time}
+        </div>
+      </div>
+    )
+  }
+}
+
+class Controls extends Component {
+  render() {
+    // check to see if timer is ticking down
+    let name = null;
+    let label = null;
+    let click = null;
+    if (this.props.running) {
+      name = 'stop';
+      label = 'Stop';
+      click = this.props.handleStop;
+    }
+    else {
+      name = 'start';
+      label = 'Start';
+      click = this.props.handleStart;
+    }
+    return (
+      <div className="controls">
+        <button
+          className={name}
+          onClick={click}
+        >
+          {label}
+        </button>
+        <button
+          className="clear"
+          onClick={this.props.handleClear}
+        >
+          Clear
+        </button>
+      </div>
+    );
+  }
+}
+
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.workTime = 25;
+    this.restTime = 5;
+    this.state = {
+      timer: null,
+      intervalID: null,
+      isWorkPhase: true,
+      notify: false
+    };
+    this.handleStart = this.handleStart.bind(this);
+    this.handleStop = this.handleStop.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+  }
+
+  componentWillMount() {
+    console.log('mounted')
+    this.setState({
+      timer: moment.duration(this.workTime, 'minutes')
+    })
+  }
+
+  handleStart() {
+
+  }
+
+  handleStop() {
+
+  }
+
+  handleClear() {
+
+  }
+
   render() {
     return (
       <div className="App">
-        Pomodoro
+        <Timer 
+          working={this.state.isWorkPhase}
+          timer={this.state.timer}
+        />
+        <Controls 
+          running={this.state.intervalID ? true : false}
+          handleStart={this.handleStart}
+          handleStop={this.handleStop}
+          handleClear={this.handleClear}
+        />
       </div>
     );
   }
