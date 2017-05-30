@@ -71,6 +71,7 @@ class App extends Component {
     super(props);
     this.workTime = 25;
     this.restTime = 5;
+    this.timerSpeed = 1000;
     this.state = {
       timer: null,
       intervalID: null,
@@ -80,25 +81,43 @@ class App extends Component {
     this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
     this.handleClear = this.handleClear.bind(this);
+    this.tick = this.tick.bind(this);
   }
 
   componentWillMount() {
-    console.log('mounted')
     this.setState({
       timer: moment.duration(this.workTime, 'minutes')
     })
   }
 
   handleStart() {
-
+    const interval = setInterval(this.tick, this.timerSpeed);
+    this.setState({
+      intervalID: interval
+    });
   }
 
   handleStop() {
-
+    clearInterval(this.state.intervalID);
+    this.setState({
+      intervalID: null
+    });
   }
 
   handleClear() {
+    this.handleStop();
+    this.setState({
+      timer: moment.duration(this.workTime, 'minutes')
+    });
+  }
 
+  tick() {
+    const timer = this.state.timer;
+    const decrement = moment.duration(this.timerSpeed, 'ms');
+    timer.subtract(decrement);
+    this.setState({
+      timer: timer
+    });
   }
 
   render() {
