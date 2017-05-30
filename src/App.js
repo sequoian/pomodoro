@@ -117,15 +117,12 @@ class App extends Component {
     const timer = this.state.timer;
     const decrement = moment.duration(this.timerSpeed, 'ms');
     timer.subtract(decrement);
-    this.setState({
-      timer: timer
-    });
     this.checkTimer(timer);
   }
 
   checkTimer(timer) {
     if (timer.asSeconds() <= 0) {
-      if (this.isWorkPhase) {
+      if (this.state.isWorkPhase) {
         this.setState({
           timer: moment.duration(this.restTime, this.timeUnit),
           isWorkPhase: false
@@ -137,6 +134,11 @@ class App extends Component {
           isWorkPhase: true
         })
       }
+    }
+    else {
+      this.setState({
+        timer: timer
+      })
     }
   }
 
