@@ -76,7 +76,7 @@ class App extends Component {
     super(props);
     this.workTime = 25;
     this.restTime = 5;
-    this.timeUnit = 'seconds';
+    this.timeUnit = 'minutes';
     this.timerSpeed = 1000;
     this.state = {
       timer: null,
