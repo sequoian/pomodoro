@@ -69,8 +69,9 @@ class Controls extends Component {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.workTime = 25;
+    this.workTime = 5;
     this.restTime = 5;
+    this.timeUnit = 'seconds';
     this.timerSpeed = 1000;
     this.state = {
       timer: null,
@@ -82,11 +83,12 @@ class App extends Component {
     this.handleStop = this.handleStop.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.tick = this.tick.bind(this);
+    this.checkTimer = this.checkTimer.bind(this);
   }
 
   componentWillMount() {
     this.setState({
-      timer: moment.duration(this.workTime, 'minutes')
+      timer: moment.duration(this.workTime, this.timeUnit)
     })
   }
 
@@ -107,7 +109,7 @@ class App extends Component {
   handleClear() {
     this.handleStop();
     this.setState({
-      timer: moment.duration(this.workTime, 'minutes')
+      timer: moment.duration(this.workTime, this.timeUnit)
     });
   }
 
@@ -118,6 +120,24 @@ class App extends Component {
     this.setState({
       timer: timer
     });
+    this.checkTimer(timer);
+  }
+
+  checkTimer(timer) {
+    if (timer.asSeconds() <= 0) {
+      if (this.isWorkPhase) {
+        this.setState({
+          timer: moment.duration(this.restTime, this.timeUnit),
+          isWorkPhase: false
+        });
+      }
+      else {
+        this.handleClear();
+        this.setState({
+          isWorkPhase: true
+        })
+      }
+    }
   }
 
   render() {
