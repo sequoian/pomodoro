@@ -69,7 +69,7 @@ class Controls extends Component {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.workTime = 5;
+    this.workTime = 25;
     this.restTime = 5;
     this.timeUnit = 'seconds';
     this.timerSpeed = 1000;
@@ -109,7 +109,8 @@ class App extends Component {
   handleClear() {
     this.handleStop();
     this.setState({
-      timer: moment.duration(this.workTime, this.timeUnit)
+      timer: moment.duration(this.workTime, this.timeUnit),
+      isWorkPhase: true
     });
   }
 
@@ -130,15 +131,12 @@ class App extends Component {
       }
       else {
         this.handleClear();
-        this.setState({
-          isWorkPhase: true
-        })
       }
     }
     else {
       this.setState({
         timer: timer
-      })
+      });
     }
   }
 
