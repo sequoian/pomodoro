@@ -6,11 +6,14 @@ class Timer extends Component {
   render() {
     // get timer phase
     let phase = null;
+    let phaseClass = null;
     if (this.props.working) {
-      phase = 'Work'
+      phase = 'Work';
+      phaseClass = 'work';
     }
     else {
       phase = 'Rest'
+      phaseClass = 'rest';
     }
 
     // format timer
@@ -20,7 +23,7 @@ class Timer extends Component {
     const time = `${minutes}:${seconds}`;
 
     return (
-      <div>
+      <div className={`display ${phaseClass}`}>
         <div className="phase">
           {phase}
         </div>
@@ -73,7 +76,7 @@ class App extends Component {
     super(props);
     this.workTime = 25;
     this.restTime = 5;
-    this.timeUnit = 'minutes';
+    this.timeUnit = 'seconds';
     this.timerSpeed = 1000;
     this.state = {
       timer: null,

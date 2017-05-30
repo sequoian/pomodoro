@@ -1,1 +1,61 @@
+* {
+  box-sizing: border-box;
+}
 
+*:focus {
+  outline: none;
+}
+
+.display {
+  margin: 100px 0;
+  text-align: center;
+}
+
+.phase {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.timer {
+  font-family: monospace;
+  font-size: 80px;
+}
+
+.work {
+  color: #f36814;
+}
+
+.rest {
+  color: #00b6b7;
+}
+
+/* buttons */
+
+button {
+  height: 100px;
+  width: 100px;
+  border: none;
+  border-radius: 50%;
+  font-size: 30px;
+  font-family: monospace;
+  cursor: pointer;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+  max-width: 500px;
+  margin: auto;
+}
+
+.start {
+  background-color: #5cd866;
+}
+
+.stop {
+  background-color: #f97575;
+}
+
+.clear {
+  background-color: #dcdcdc;
+}
